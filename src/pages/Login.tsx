@@ -4,7 +4,7 @@ import { authApi } from '@/api/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toastEmitter } from '@/api/client';
-import { Shield, Lock, User } from 'lucide-react';
+import { Lock, User } from 'lucide-react';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ export function LoginPage() {
       localStorage.setItem('token', response.token);
       toastEmitter.emit('登录成功', 'success');
       navigate('/tunnel');
-    } catch (error) {
+    } catch {
       // Error is handled by API interceptor
     } finally {
       setLoading(false);
@@ -30,18 +30,6 @@ export function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      {/* Header */}
-      <header className="flex-shrink-0 bg-card border-b safe-area-top">
-        <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-center">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center">
-              <Shield className="w-4 h-4 text-primary-foreground" />
-            </div>
-            <span className="font-bold text-lg">Tools</span>
-          </div>
-        </div>
-      </header>
-
       {/* Main Content */}
       <main className="flex-1 flex items-center justify-center p-4">
         <div className="w-full max-w-sm">
@@ -58,8 +46,8 @@ export function LoginPage() {
 
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="username" className="text-sm font-medium px-1">
+            <div className="space-y-3">
+              <label htmlFor="username" className="text-sm font-medium px-1 block">
                 用户名
               </label>
               <div className="relative">
@@ -76,8 +64,8 @@ export function LoginPage() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium px-1">
+            <div className="space-y-3">
+              <label htmlFor="password" className="text-sm font-medium px-1 block">
                 密码
               </label>
               <div className="relative">
