@@ -60,8 +60,28 @@ export function ClipboardPage() {
 
   const handleCopy = async (content: string) => {
     try {
-      await navigator.clipboard.writeText(content);
-      toastEmitter.emit('内容已复制到剪贴板', 'success');
+      if (navigator.clipboard && window.isSecureContext) {
+        // 使用现代 Clipboard API（HTTPS 环境）
+        await navigator.clipboard.writeText(content);
+        toastEmitter.emit('内容已复制到剪贴板', 'success');
+      } else {
+        // 使用传统方法作为后备（HTTP 环境）
+        const textArea = document.createElement('textarea');
+        textArea.value = content;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        const success = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        if (success) {
+          toastEmitter.emit('内容已复制到剪贴板', 'success');
+        } else {
+          throw new Error('复制失败');
+        }
+      }
     } catch (error) {
       toastEmitter.emit('复制失败', 'error');
     }
