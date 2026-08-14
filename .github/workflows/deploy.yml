@@ -56,4 +56,5 @@ jobs:
             --webdav-url "$WEBDAV_PATH" \
             --webdav-user "$WEBDAV_USERNAME" \
             --webdav-pass "$(rclone obscure "$WEBDAV_PASSWORD")" \
+            --ignore-times \
             --progress
