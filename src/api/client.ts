@@ -31,19 +31,6 @@ class ApiClient {
       },
     });
 
-    // Request interceptor
-    this.client.interceptors.request.use(
-      (config) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-      },
-      (error) => Promise.reject(error)
-    );
-
-    // Response interceptor
     this.client.interceptors.response.use(
       (response) => response,
       (error) => {
@@ -53,15 +40,12 @@ class ApiClient {
           const { status, data } = error.response;
           message = data?.error || message;
 
-          // Handle specific HTTP status codes
           switch (status) {
             case 400:
               message = data?.error || '请求参数错误';
               break;
             case 401:
-              message = '未授权，请重新登录';
-              localStorage.removeItem('token');
-              window.location.href = '/login';
+              message = '未授权';
               break;
             case 403:
               message = '没有权限执行此操作';
